@@ -1,0 +1,29 @@
+extends layout
+
+block content
+  #banner.page-header
+    .row
+      .col-xs-12.col-lg-6
+        h1= pageHeader.title
+          br
+          small &nbsp;#{pageHeader.strapline}
+    .row
+      .col-xs-12.col-sm-8
+        table.table.table-bordered.table-hover
+          thead
+            tr
+              th Last name
+              th First name
+              th Grade
+          tbody
+            each student in students
+              tr
+                td
+                  a(href="/students/student")= student.lastName
+                td
+                  a(href="/students/student")= student.firstName
+                td
+                  a(href="/students/student")= student.grade
+      .col-xs-12.col-sm-4
+        a.btn.btn-default(href='/students/new') Add Student
+        p.lead Add a student, assign a test, and have students log in and complete. Then you're done!

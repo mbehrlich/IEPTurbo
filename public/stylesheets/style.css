@@ -6,3 +6,28 @@ body {
 a {
   color: #00B7FF;
 }
+
+tbody tr td a:hover {
+  color: black;
+  text-decoration: none;
+}
+
+tbody tr:hover {
+  color: black;
+}
+
+tbody tr td a {
+  display: block;
+  height: 100%;
+  width: 100%;
+  color: inherit;
+}
+
+tbody tr td {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+div.panel-body {
+  color: black;
+}

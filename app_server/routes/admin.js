@@ -1,10 +1,13 @@
 var express = require('express');
 var router = express.Router();
-var ctrlMain = require('../controllers/main');
+var ctrlAdmin = require('../controllers/admin');
 
 
-/* GET home page. */
-router.get('/', ctrlMain.index);
+/* GET User lists */
+router.get('/', ctrlAdmin.index);
+router.get('/users/user', ctrlAdmin.user);
+router.get('/users/new', ctrlAdmin.addUser);
+router.get('/users/user/edit', ctrlAdmin.editUser);
 
 
 module.exports = router;

@@ -1,0 +1,61 @@
+extends layout
+
+block content
+  .row.page-header
+    .col-xs-12.col-lg-12
+      h1 Matthew Ehrlich
+  .row
+    .col-xs-12.col-md-9
+      .panel.panel-primary
+        .panel-heading
+          h2.panel-title Student Info
+        .panel-body
+          p Password: 1234
+          p School: Continental Elementary School
+          p Birthday: 08/26/1986
+          p Age: 29
+          p Disability: Specific Learning Disability
+          p Race: Caucasian
+          p Grade: 8
+          p Case Manager: Krystina Ehrlich
+      a.btn.btn-default(href='/students/student/edit') Edit
+      hr
+  .row
+    .col-xs-12.col-sm-8
+      table.table.table-bordered.table-hover
+        thead
+          tr
+            td Subject
+            td Grade level
+            td Type
+            td Finished?
+        tbody
+          tr
+            td
+              a(href='/students/student/tests/test') writing
+            td
+              a(href='/students/student/tests/test') 8
+            td
+              a(href='/students/student/tests/test') primary
+            td
+              a(href='/students/student/tests/test') yes
+          tr
+            td
+              a(href='/students/student/tests/test/edit') writing
+            td
+              a(href='/students/student/tests/test/edit') 8
+            td
+              a(href='/students/student/tests/test/edit') progress report
+            td
+              a(href='/students/student/tests/test/edit') no
+          tr
+            td
+              a(href='/students/student/tests/test/edit') math
+            td
+              a(href='/students/student/tests/test/edit') 6
+            td
+              a(href='/students/student/tests/test/edit') primary
+            td
+              a(href='/students/student/tests/test/edit') no
+  .row
+    a.btn.btn-default(href='/students/student/tests/new') Add New Test

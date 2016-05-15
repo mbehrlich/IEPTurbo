@@ -1,0 +1,60 @@
+extends layout
+
+block content
+  .row.page-header
+    .col-lg-12
+      h1 Add a New Student
+  .row
+    .col-xs-12.col-md-12
+      .form.form-horizontal(action="/", method="get", role="form")
+        .form-group
+          label.col-xs-10.col-sm-4.control-label(for="lastName") Last name
+          .col-xs-12.col-sm-8.col-md-4
+            input#lastName.form-control(name="lastName")
+        .form-group
+          label.col-xs-10.col-sm-4.control-label(for="firstName") First name
+          .col-xs-12.col-sm-8.col-md-4
+            input#firstName.form-control(name="firstName")
+        .form-group
+          label.col-xs-10.col-sm-4.control-label(for="username") Username
+          .col-xs-12.col-sm-8.col-md-4
+            input#username.form-control(name="username")
+        .form-group
+          label.col-xs-10.col-sm-4.control-label(for="password") Password
+          .col-xs-12.col-sm-8.col-md-4
+            input#password.form-control(type="password", name="password")
+        .form-group
+          label.col-xs-10.col-sm-4.control-label(for="birthdate") Birthdate
+          .col-xs-12.col-sm-8.col-md-4
+            input#birthdate.form-control(type="date", name="birthdate")
+        .form-group
+          label.col-xs-10.col-sm-4.control-label(for="school") School
+          .col-xs-12.col-sm-8.col-md-4
+            input#school.form-control(name="school")
+        .form-group
+          label.col-xs-10.col-sm-4.control-label(for="grade") Grade
+          .col-xs-12.col-sm-2.col-md-2
+            select#grade.form-control.input-sm(name="grade")
+              option Pre-K
+              option KG
+              option 1
+              option 2
+              option 3
+              option 4
+              option 5
+              option 6
+              option 7
+              option 8
+              option 9
+              option 10
+              option 11
+              option 12
+        .form-group
+          label.col-xs-10.col-sm-4.control-label(for="disability") Disability
+          .col-xs-12.col-sm-8.col-md-4
+            input#disability.form-control(name="disability")
+        .form-group
+          label.col-xs-10.col-sm-4.control-label(for="caseManager") Case Manager
+          .col-xs-12.col-sm-8.col-md-4
+            input#caseManager.form-control(name="caseManager")
+        button.btn.btn-default Add Student
