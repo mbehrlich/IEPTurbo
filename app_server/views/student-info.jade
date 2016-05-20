@@ -3,22 +3,23 @@ extends layout
 block content
   .row.page-header
     .col-xs-12.col-lg-12
-      h1 Matthew Ehrlich
+      h1= pageHeader.title
   .row
     .col-xs-12.col-md-9
       .panel.panel-primary
         .panel-heading
           h2.panel-title Student Info
         .panel-body
-          p Password: 1234
-          p School: Continental Elementary School
-          p Birthday: 08/26/1986
-          p Age: 29
-          p Disability: Specific Learning Disability
-          p Race: Caucasian
-          p Grade: 8
-          p Case Manager: Krystina Ehrlich
-      a.btn.btn-default(href='/students/student/edit') Edit
+          p Password: #{student.password}
+          p School: #{student.school}
+          p Birthday: #{birth_day}
+          p Age: #{age}
+          p Disability: #{student.disability}
+          p Race: #{student.race}
+          p Grade: #{student.grade}
+          p Case Manager: #{student.caseManager}
+      a.btn.btn-default(href='/students/#{student._id}/edit') Edit
+      a.btn.btn-default(href='/') Delete
       hr
   .row
     .col-xs-12.col-sm-8
@@ -32,13 +33,13 @@ block content
         tbody
           tr
             td
-              a(href='/students/student/tests/test') writing
+              a(href='/students/#{student._id}/tests/test') writing
             td
-              a(href='/students/student/tests/test') 8
+              a(href='/students/#{student._id}/tests/test') 8
             td
-              a(href='/students/student/tests/test') primary
+              a(href='/students/#{student._id}/tests/test') primary
             td
-              a(href='/students/student/tests/test') yes
+              a(href='/students/#{student._id}/tests/test') yes
           tr
             td
               a(href='/students/student/tests/test/edit') writing
@@ -58,4 +59,4 @@ block content
             td
               a(href='/students/student/tests/test/edit') no
   .row
-    a.btn.btn-default(href='/students/student/tests/new') Add New Test
+    a.btn.btn-default(href='/students/#{student._id}/tests/new') Add New Test

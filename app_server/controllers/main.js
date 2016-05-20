@@ -1,34 +1,144 @@
+var request = require('request');
+var apiOptions = {
+  server: "http://localhost:3000"
+};
+if (process.env.NODE_ENV === 'production') {
+  apiOptions.server = "https://boiling-fortress-24821.herokuapp.com";
+}
+
+/* Error handling */
+var _showError = function(req, res, status) {
+  var title, content;
+  if (status === 404) {
+    title = "404, page not found";
+    content = "We can't find this page. Sorry";
+  }
+  else {
+    title = status + ", something's gone wrong";
+    content = status + " There is an error on this page";
+  }
+  res.status(status);
+  res.render('generic-text', {
+    title: title,
+    content: content
+  });
+};
+
 /*GET home page */
-module.exports.index = function(req, res) {
+var renderHomepage = function(req, res) {
+  res.render('student-list', {
+    title: 'IEP-Turbo - IEPs made easy',
+    pageHeader: {
+      title: 'IEP Turbo',
+      strapline: 'IEP goals made fast and easy!'
+    }
+  });
+};
+
+/* var renderHomepage = function(req, res, responseBody) {
+  var message;
+  if (!(responseBody instanceof Array)) {
+    message = "API lookup error";
+    responseBody = [];
+  }
+  else if (!responseBody.length) {
+    message = "No places found nearby";
+  }
   res.render('student-list', {
     title: 'IEP-Turbo - IEPs made easy',
     pageHeader: {
       title: 'IEP Turbo',
       strapline: 'IEP goals made fast and easy!'
     },
-    students: [
-      {
-        lastName: "Ehrlich",
-        firstName: "Matthew",
-        grade: 8
-      },
-      {
-        lastName: "Washington",
-        firstName: "George",
-        grade: 5
-      }
-    ]
+    students: responseBody,
+    message: message
+  });
+}; */
+
+module.exports.index = function(req, res) {
+  renderHomepage(req, res);
+};
+
+/*  var path = '/api/users/0/students';
+  requestOptions = {
+    url: apiOptions.server + path,
+    method: "GET",
+    json: {}
+  };
+  request(requestOptions, function(err, response, body) {
+    if (response.statusCode === 200) {
+      renderHomepage(req, res, body);
+    }
+    else {
+      _showError(req, res, response.statusCode);
+    }
+  });
+}; */
+
+/*GET student page */
+var renderStudentPage = function(req, res, studentInfo) {
+  var birthday = new Date(studentInfo.birthday);
+  res.render('student-info', {
+    title: studentInfo.firstName + " " + studentInfo.lastName,
+    pageHeader: {title: studentInfo.firstName + " " + studentInfo.lastName},
+    student: studentInfo,
+    birth_day: (birthday.getMonth()+1) + '/' + birthday.getDate() + '/' + birthday.getFullYear(),
+    age: (new Date(new Date() - birthday)).getFullYear() - 1970
   });
 };
 
-/*GET student page */
 module.exports.student = function(req, res) {
-  res.render('student-info', {title: 'Student'});
+  var path = "/api/users/" + req.params.studentid;
+  requestOptions = {
+    url: apiOptions.server + path,
+    method: "GET",
+    json: {}
+  };
+  request(requestOptions, function(err, response, body) {
+    if (response.statusCode === 200) {
+      renderStudentPage(req, res, body);
+    }
+    else {
+      _showError(req, res, response.statusCode);
+    }
+  });
 };
 
 /*GET add student page */
 module.exports.addStudent = function(req, res) {
   res.render('add-student', {title: 'Add a new student'});
+};
+
+/*POST add student page */
+module.exports.doAddStudent = function(req, res) {
+  var path = "/api/users";
+  var postdata = {
+    username: req.body.username,
+    password: req.body.password,
+    lastName: req.body.lastName,
+    firstName: req.body.firstName,
+    type: "student",
+    school: req.body.school,
+    birthday: req.body.birthdate,
+    disability: req.body.disability,
+    race: req.body.race,
+    grade: req.body.grade,
+    caseManager: req.body.caseManager,
+    reference_id: 1
+  };
+  requestOptions = {
+    url: apiOptions.server + path,
+    method: "POST",
+    json: postdata
+  };
+  request(requestOptions, function(err, response, body) {
+    if (response.statusCode === 201) {
+      res.redirect('/');
+    }
+    else {
+      _showError(req, res, response.statusCode);
+    }
+  });
 };
 
 /*GET edit student page */
@@ -53,5 +163,9 @@ module.exports.editTest = function(req, res) {
 
 /* GET about page */
 module.exports.about = function(req, res) {
-  res.render('generic-text', {title: 'About'});
-}
+  res.render('generic-text', {
+    title: 'About',
+    content: "IEP Turbo was created by me, Matthew Ehrlich. I am a former special education teacher who spent hours upon hours painstakingly administer tests and write IEPs. Hours that I could've spent teaching, planning lessons, or sitting by the pool.",
+    content2: "IEP Turbo was designed to take some of the pain and time out of writing IEPs."
+  });
+};
