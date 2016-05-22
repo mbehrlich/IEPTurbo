@@ -19,7 +19,7 @@ block content
           p Grade: #{student.grade}
           p Case Manager: #{student.caseManager}
       a.btn.btn-default(href='/students/#{student._id}/edit') Edit
-      a.btn.btn-default(href='/') Delete
+      a.btn.btn-default(href='#', class='delete_user', id='#{student._id}') Delete
       hr
   .row
     .col-xs-12.col-sm-8

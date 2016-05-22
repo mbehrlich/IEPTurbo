@@ -8,6 +8,7 @@ router.get('/', ctrlMain.index);
 router.get('/students/new', ctrlMain.addStudent);
 router.post('/students/new', ctrlMain.doAddStudent);
 router.get('/students/:studentid', ctrlMain.student);
+router.delete('/students/:studentid', ctrlMain.deleteStudent);
 router.get('/students/:studentid/edit', ctrlMain.editStudent);
 
 /* GET teacher pages for tests */

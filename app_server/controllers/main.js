@@ -126,7 +126,7 @@ module.exports.doAddStudent = function(req, res) {
     caseManager: req.body.caseManager,
     reference_id: 1
   };
-  requestOptions = {
+  var requestOptions = {
     url: apiOptions.server + path,
     method: "POST",
     json: postdata
@@ -144,6 +144,25 @@ module.exports.doAddStudent = function(req, res) {
 /*GET edit student page */
 module.exports.editStudent = function(req, res) {
   res.render('index', {title: 'Edit a student'});
+};
+
+/*DELETE student*/
+module.exports.deleteStudent = function(req, res) {
+  var path = '/api/users/' + req.params.studentid;
+  var requestOptions = {
+    url: apiOptions.server + path,
+    method: "DELETE",
+    json: {}
+  };
+  request(requestOptions, function(err, response, body) {
+    if (response.statusCode !== 204) {
+      _showError(req, res, response.statusCode);
+      res.sendStatus(response.statusCode);
+    }
+    else {
+      res.sendStatus(204);
+    }
+  });
 };
 
 /*GET test page */
