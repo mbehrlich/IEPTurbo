@@ -10,6 +10,7 @@ router.post('/students/new', ctrlMain.doAddStudent);
 router.get('/students/:studentid', ctrlMain.student);
 router.delete('/students/:studentid', ctrlMain.deleteStudent);
 router.get('/students/:studentid/edit', ctrlMain.editStudent);
+router.post('/students/:studentid/edit', ctrlMain.updateStudent);
 
 /* GET teacher pages for tests */
 router.get('/students/:studentid/tests/test', ctrlMain.test);

@@ -87,8 +87,7 @@ module.exports.userUpdate = function(req, res) {
     return;
   }
   User
-    .findById(req.params.studentid)
-    .select('-tests -type')
+    .findById(req.params.userid)
     .exec(
       function(err, user) {
         if (!user) {
@@ -105,7 +104,7 @@ module.exports.userUpdate = function(req, res) {
         user.lastName = req.body.lastName;
         user.firstName = req.body.firstName;
         user.school = req.body.school;
-        user.birthday = req.body.birthdate;
+        user.birthday = req.body.birthday;
         user.disability = req.body.disability;
         user.race = req.body.race;
         user.grade = req.body.grade;

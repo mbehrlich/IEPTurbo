@@ -142,8 +142,61 @@ module.exports.doAddStudent = function(req, res) {
 };
 
 /*GET edit student page */
+var renderEditStudentPage = function(req, res, studentInfo) {
+  var birthday = (new Date(studentInfo.birthday)).toJSON().substring(0, 10);
+  res.render('edit-student', {
+    title: "Edit " + studentInfo.firstName + " " + studentInfo.lastName,
+    pageHeader: {title: studentInfo.firstName + " " + studentInfo.lastName},
+    student: studentInfo,
+    birthday: birthday
+  });
+};
+
 module.exports.editStudent = function(req, res) {
-  res.render('index', {title: 'Edit a student'});
+  var path = "/api/users/" + req.params.studentid;
+  requestOptions = {
+    url: apiOptions.server + path,
+    method: "GET",
+    json: {}
+  };
+  request(requestOptions, function(err, response, body) {
+    if (response.statusCode === 200) {
+      renderEditStudentPage(req, res, body);
+    }
+    else {
+      _showError(req, res, response.statusCode);
+    }
+  });
+};
+
+module.exports.updateStudent = function(req, res) {
+  var path = "/api/users/" + req.params.studentid;
+  var postdata = {
+    username: req.body.username,
+    password: req.body.password,
+    lastName: req.body.lastName,
+    firstName: req.body.firstName,
+    school: req.body.school,
+    birthday: req.body.birthdate,
+    disability: req.body.disability,
+    race: req.body.race,
+    grade: req.body.grade,
+    caseManager: req.body.caseManager,
+    reference_id: 1
+  };
+  var requestOptions = {
+    url: apiOptions.server + path,
+    method: "PUT",
+    json: postdata
+  };
+  request(requestOptions, function(err, response, body) {
+    if (response.statusCode === 200) {
+      res.redirect('/students/' + req.params.studentid);
+    }
+    else {
+      _showError(req, res, response.statusCode);
+    }
+  });
 };
 
 /*DELETE student*/
