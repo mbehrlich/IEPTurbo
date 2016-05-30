@@ -7,6 +7,10 @@ a {
   color: #00B7FF;
 }
 
+#writingScores {
+  display: none;
+}
+
 #filter {
   margin-left: 4px;
   color: black;

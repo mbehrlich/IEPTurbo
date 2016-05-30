@@ -1,6 +1,11 @@
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
 
+var sendJsonResponse = function(res, status, content) {
+  res.status(status);
+  res.json(content);
+};
+
 module.exports.getStudentTests = function(req, res) {
 };
 
@@ -67,10 +72,11 @@ var doAddTest = function(req, res, student) {
   else {
     test_hash = {
       subject: req.body.subject,
+      date: req.body.date,
       gradeLevel: req.body.gradeLevel,
       type: req.body.type,
     };
-    if (req.body.type === "writing") {
+    if (req.body.subject === "Writing") {
       test_hash.finished = true;
       test_hash.writingScores = {};
       test_hash.writingScores.ideas = req.body.ideas;
@@ -83,6 +89,7 @@ var doAddTest = function(req, res, student) {
     else {
       test_hash.finished = false;
     }
+    student.tests.push(test_hash);
     student.save(function(err, student) {
       var thisTest;
       if (err) {
@@ -105,6 +112,7 @@ module.exports.testCreate = function(req, res) {
       .exec(
         function(err, student) {
           if (err) {
+
             sendJsonResponse(res, 400, err);
           }
           else {
@@ -122,4 +130,50 @@ module.exports.testCreate = function(req, res) {
 
 module.exports.testUpdate = function(req, res) {};
 
-module.exports.testDelete = function(req, res) {};
+var doDeleteTest = function(req, res, student, testid, studentid) {
+  if (!student || !testid) {
+    sendJsonResponse(res, 404, {
+      "message": "info missing"
+    });
+  }
+  else {
+    for (var i = 0; i < student.tests.length; i++) {
+      if (student.tests[i]._id.toString() === testid) {
+        student.tests.splice(i, 1);
+      }
+    }
+    student.save(function(err, student) {
+      if (err) {
+        sendJsonResponse(res, 404, err);
+      }
+      else {
+        sendJsonResponse(res, 204, null);
+      }
+    });
+  }
+
+};
+
+module.exports.testDelete = function(req, res) {
+  var studentid = req.params.studentid;
+  var testid = req.params.testid
+  if (studentid) {
+    User
+      .findById(studentid)
+      .select("tests")
+      .exec(function(err, student) {
+        if (err) {
+          sendJsonResponse(res, 404, err);
+          return;
+        }
+        else {
+          doDeleteTest(req, res, student, testid, studentid)
+        }
+      });
+  }
+  else {
+    sendJsonResponse(res, 404, {
+      "message": "No studentid"
+    });
+  }
+};

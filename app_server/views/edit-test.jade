@@ -1,0 +1,35 @@
+extends layout
+
+block content
+  .row.page-header
+    .col-lg-12
+      h1= pageHeader.title
+  .row
+    .col-xs-12.col-md-12
+      form.form-horizontal(action="", method="post", role="form")
+        .form-group
+          label.col-xs-10.col-sm-4.control-label(for="subject") Subject
+          .col-xs-12.col-sm-2.col-md-2
+            select#subject.form-control.input-sm(name="subject")
+              option= data.test.subject
+        .form-group
+          label.col-xs-10.col-sm-4.control-label(for="gradeLevel") Grade Level
+          .col-xs-12.col-sm-2.col-md-2
+            select#gradeLevel.form-control.input-sm(name="gradeLevel")
+              option= data.test.gradeLevel
+              option Pre-K
+              option KG
+              option 1
+              option 2
+              option 3
+              option 4
+              option 5
+              option 6
+              option 7
+              option 8
+              option 9
+              option 10
+              option 11
+              option 12
+        button.btn.btn-default.pull-right(href="/students/#{data.student.id}/tests/#{data.test._id}/edit") Update Test
+        a.btn.btn-default.pull-right(href="#", class="delete_test", id="data.test._id") Delete Test

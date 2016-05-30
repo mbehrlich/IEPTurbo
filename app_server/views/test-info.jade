@@ -1,0 +1,9 @@
+extends layout
+
+block content
+
+  h1= data.student.name
+  p= data.student.school
+  p= data.test.subject
+
+  a.btn.btn-default.pull-right(href="#", class="delete_test", id="data.test._id") Delete Record

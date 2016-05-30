@@ -23,40 +23,27 @@ block content
       hr
   .row
     .col-xs-12.col-sm-8
+      p #{ message }
       table.table.table-bordered.table-hover
         thead
           tr
+            td Date
             td Subject
             td Grade level
             td Type
             td Finished?
         tbody
-          tr
-            td
-              a(href='/students/#{student._id}/tests/test') writing
-            td
-              a(href='/students/#{student._id}/tests/test') 8
-            td
-              a(href='/students/#{student._id}/tests/test') primary
-            td
-              a(href='/students/#{student._id}/tests/test') yes
-          tr
-            td
-              a(href='/students/student/tests/test/edit') writing
-            td
-              a(href='/students/student/tests/test/edit') 8
-            td
-              a(href='/students/student/tests/test/edit') progress report
-            td
-              a(href='/students/student/tests/test/edit') no
-          tr
-            td
-              a(href='/students/student/tests/test/edit') math
-            td
-              a(href='/students/student/tests/test/edit') 6
-            td
-              a(href='/students/student/tests/test/edit') primary
-            td
-              a(href='/students/student/tests/test/edit') no
+          each test in student.tests
+            tr
+              td
+                a(href='/students/#{student._id}/tests/#{test._id}') #{(new Date(test.date)).toDateString()}
+              td
+                a(href='/students/#{student._id}/tests/#{test._id}') #{test.subject}
+              td
+                a(href='/students/#{student._id}/tests/#{test._id}') #{test.gradeLevel}
+              td
+                a(href='/students/#{student._id}/tests/#{test._id}') #{test.type}
+              td
+                a(href='/students/#{student._id}/tests/#{test._id}') #{test.finished}
   .row
     a.btn.btn-default(href='/students/#{student._id}/tests/new') Add New Test

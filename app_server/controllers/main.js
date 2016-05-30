@@ -77,13 +77,18 @@ module.exports.index = function(req, res) {
 
 /*GET student page */
 var renderStudentPage = function(req, res, studentInfo) {
+  var message;
   var birthday = new Date(studentInfo.birthday);
+  if (studentInfo.tests.length === 0) {
+    message = "No tests found";
+  }
   res.render('student-info', {
     title: studentInfo.firstName + " " + studentInfo.lastName,
     pageHeader: {title: studentInfo.firstName + " " + studentInfo.lastName},
     student: studentInfo,
     birth_day: (birthday.getMonth()+1) + '/' + birthday.getDate() + '/' + birthday.getFullYear(),
-    age: (new Date(new Date() - birthday)).getFullYear() - 1970
+    age: (new Date(new Date() - birthday)).getFullYear() - 1970,
+    message: message
   });
 };
 
@@ -219,18 +224,136 @@ module.exports.deleteStudent = function(req, res) {
 };
 
 /*GET test page */
+var renderTestPage = function(req, res, data) {
+  if (data.test.finished) {
+    res.render('test-info', {
+      title: "Results",
+      pageHeader: {title: "Results"},
+      data: data
+    });
+  }
+  else {
+    res.redirect('/students/' + data.student.id + '/tests/' + data.test._id + '/edit');
+  }
+};
+
 module.exports.test = function(req, res) {
-  res.render('index', {title: 'Test'});
+  var path = '/api/' + req.params.studentid + '/tests/' + req.params.testid;
+  var requestOptions = {
+    url: apiOptions.server + path,
+    method: "GET",
+    json: {}
+  };
+  request(requestOptions, function(err, response, body) {
+    if (response.statusCode === 200) {
+      renderTestPage(req, res, body);
+    }
+    else {
+      _showError(req, res, response.statusCode);
+    }
+  });
 };
 
 /*GET add test page */
+var renderAddTestPage = function(req, res, studentInfo) {
+  res.render('add-test', {
+    title: "Add a test for " + studentInfo.firstName + " " + studentInfo.lastName,
+    pageHeader: {title: "Add a test for " + studentInfo.firstName + " " + studentInfo.lastName},
+    student: studentInfo
+  });
+};
+
 module.exports.addTest = function(req, res) {
-  res.render('index', {title: 'Add a new test'});
+  var path = "/api/users/" + req.params.studentid;
+  requestOptions = {
+    url: apiOptions.server + path,
+    method: "GET",
+    json: {}
+  };
+  request(requestOptions, function(err, response, body) {
+    if (response.statusCode === 200) {
+      renderAddTestPage(req, res, body);
+    }
+    else {
+      _showError(req, res, response.statusCode);
+    }
+  });
+};
+
+/*POST add test page */
+module.exports.doAddTest = function(req, res) {
+  var path = "/api/" + req.params.studentid + "/tests";
+  var postdata = {
+    subject: req.body.subject,
+    date: new Date(),
+    gradeLevel: req.body.gradeLevel,
+    type: "primary",
+    writingScores: {
+      ideas: req.body.ideas,
+      organization: req.body.organization,
+      voice: req.body.voice,
+      wordChoice: req.body.wordChoice,
+      sentenceFluency: req.body.sentenceFluency,
+      conventions: req.body.conventions
+    }
+  };
+  var requestOptions = {
+    url: apiOptions.server + path,
+    method: "POST",
+    json: postdata
+  };
+  request(requestOptions, function(err, response, body) {
+    if (response.statusCode === 201) {
+      res.redirect('/students/' + req.params.studentid);
+    }
+    else {
+      _showError(req, res, response.statusCode);
+    }
+  });
 };
 
 /*GET edit a test page */
+var renderEditTestPage = function(req, res, data) {
+  res.render('edit-test', {
+    title: "Edit test",
+    pageHeader: {title: "Edit test"},
+    data: data
+  });
+};
+
 module.exports.editTest = function(req, res) {
-  res.render('index', {title: 'Edit a test'});
+  var path = '/api/' + req.params.studentid + '/tests/' + req.params.testid;
+  var requestOptions = {
+    url: apiOptions.server + path,
+    method: "GET",
+    json: {}
+  };
+  request(requestOptions, function(err, response, body) {
+    if (response.statusCode === 200) {
+      renderEditTestPage(req, res, body);
+    }
+    else {
+      _showError(req, res, response.statusCode);
+    }
+  });
+};
+
+/* DELETE test */
+module.exports.deleteTest = function(req, res) {
+  var path = '/api/' + req.params.studentid + '/tests/' + req.params.testid;
+  var requestOptions = {
+    url: apiOptions.server + path,
+    method: "DELETE",
+    json: {}
+  };
+  request(requestOptions, function(err, response, body) {
+    if (response.statusCode !== 204) {
+      _showError(req, res, response.statusCode);
+    }
+    else {
+      res.status(200).json({studentid: req.params.studentid});
+    }
+  });
 };
 
 /* GET about page */

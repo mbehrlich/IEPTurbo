@@ -13,9 +13,12 @@ router.get('/students/:studentid/edit', ctrlMain.editStudent);
 router.post('/students/:studentid/edit', ctrlMain.updateStudent);
 
 /* GET teacher pages for tests */
-router.get('/students/:studentid/tests/test', ctrlMain.test);
 router.get('/students/:studentid/tests/new', ctrlMain.addTest);
-router.get('/students/:studentid/tests/test/edit', ctrlMain.editTest);
+router.post('/students/:studentid/tests/new', ctrlMain.doAddTest);
+router.get('/students/:studentid/tests/:testid', ctrlMain.test);
+router.delete('/students/:studentid/tests/:testid', ctrlMain.deleteTest);
+router.get('/students/:studentid/tests/:testid/edit', ctrlMain.editTest);
+router.delete('/students/:studentid/tests/:testid/edit', ctrlMain.deleteTest);
 
 /* GET other pages */
 router.get('/about', ctrlMain.about);

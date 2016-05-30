@@ -1,6 +1,11 @@
 var mongoose = require('mongoose');
 var Item = mongoose.model('Item');
 
+var sendJsonResponse = function(res, status, content) {
+  res.status(status);
+  res.json(content);
+};
+
 module.exports.allItems = function(req, res) {
   Item
     .find()
