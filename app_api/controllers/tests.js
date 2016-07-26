@@ -128,7 +128,53 @@ module.exports.testCreate = function(req, res) {
   }
 };
 
-module.exports.testUpdate = function(req, res) {};
+var doUpdateTest = function(req, res, student, testid, studentid) {
+  if (!student || !testid) {
+    sendJsonResponse(res, 404, {
+      "message": "info missing"
+    });
+  }
+  else {
+    for (var i = 0; i < student.tests.length; i++) {
+      if (student.tests[i]._id.toString() === testid) {
+        student.tests[i].gradeLevel = req.body.gradeLevel;
+      }
+    }
+    student.save(function(err, student) {
+      if (err) {
+        sendJsonResponse(res, 404, err);
+      }
+      else {
+        sendJsonResponse(res, 200, student);
+      }
+    });
+  }
+
+};
+
+module.exports.testUpdate = function(req, res) {
+  var studentid = req.params.studentid;
+  var testid = req.params.testid
+  if (studentid) {
+    User
+      .findById(studentid)
+      .select("tests")
+      .exec(function(err, student) {
+        if (err) {
+          sendJsonResponse(res, 404, err);
+          return;
+        }
+        else {
+          doUpdateTest(req, res, student, testid, studentid)
+        }
+      });
+  }
+  else {
+    sendJsonResponse(res, 404, {
+      "message": "No studentid"
+    });
+  }
+};
 
 var doDeleteTest = function(req, res, student, testid, studentid) {
   if (!student || !testid) {

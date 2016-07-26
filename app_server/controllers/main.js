@@ -86,7 +86,7 @@ var renderStudentPage = function(req, res, studentInfo) {
     title: studentInfo.firstName + " " + studentInfo.lastName,
     pageHeader: {title: studentInfo.firstName + " " + studentInfo.lastName},
     student: studentInfo,
-    birth_day: (birthday.getMonth()+1) + '/' + birthday.getDate() + '/' + birthday.getFullYear(),
+    birth_day: (birthday.getUTCMonth()+1) + '/' + birthday.getUTCDate() + '/' + birthday.getUTCFullYear(),
     age: (new Date(new Date() - birthday)).getFullYear() - 1970,
     message: message
   });
@@ -331,6 +331,27 @@ module.exports.editTest = function(req, res) {
   request(requestOptions, function(err, response, body) {
     if (response.statusCode === 200) {
       renderEditTestPage(req, res, body);
+    }
+    else {
+      _showError(req, res, response.statusCode);
+    }
+  });
+};
+
+/* PUT test update */
+module.exports.updateTest = function(req, res) {
+  var path = "/api/" + req.params.studentid + "/tests/" + req.params.testid;
+  var postdata = {
+    gradeLevel: req.body.gradeLevel
+  };
+  var requestOptions = {
+    url: apiOptions.server + path,
+    method: "PUT",
+    json: postdata
+  };
+  request(requestOptions, function(err, response, body) {
+    if (response.statusCode === 200) {
+      res.redirect('/students/' + req.params.studentid);
     }
     else {
       _showError(req, res, response.statusCode);

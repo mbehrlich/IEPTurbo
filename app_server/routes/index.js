@@ -19,6 +19,7 @@ router.get('/students/:studentid/tests/:testid', ctrlMain.test);
 router.delete('/students/:studentid/tests/:testid', ctrlMain.deleteTest);
 router.get('/students/:studentid/tests/:testid/edit', ctrlMain.editTest);
 router.delete('/students/:studentid/tests/:testid/edit', ctrlMain.deleteTest);
+router.post('/students/:studentid/tests/:testid/edit', ctrlMain.updateTest);
 
 /* GET other pages */
 router.get('/about', ctrlMain.about);
